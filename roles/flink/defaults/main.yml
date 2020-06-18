@@ -1,0 +1,9 @@
+flink_base: /opt/flink
+flink_home: '{{ flink_base }}/current'
+flink_scala_version: '2.12'
+flink_distr_version: '1.9.3'
+flink_filename: 'flink-{{ flink_distr_version }}-bin-scala_{{ flink_scala_version }}.tgz'
+flink_dir:      'flink-{{ flink_distr_version }}'
+#-bin-scala_{{ flink_scala_version }}'
+
+flink_distr_url: 'https://apache-mirror.rbc.ru/pub/apache/flink/flink-{{ flink_distr_version }}/{{ flink_filename }}'

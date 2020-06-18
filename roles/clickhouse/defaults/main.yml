@@ -1,0 +1,5 @@
+kafka_home: /opt/kafka
+kafka_scala_version: '2.12'
+kafka_distr_version: '2.5.0'
+kafka_filename: 'kafka_{{ kafka_scala_version }}-{{ kafka_distr_version }}.tgz'
+kafka_distr_url: 'http://mirror.linux-ia64.org/apache/kafka/{{ kafka_distr_version }}/{{ kafka_filename }}'

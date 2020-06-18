@@ -1,0 +1,70 @@
+---
+- name: Install Java
+  package:
+    name: openjdk-8-jre-headless 
+    state: present
+  with_items:
+    - openjdk-8-jre-headless
+    - unzip
+    - gtar
+
+
+- name: Create User
+  user:
+    name: kafka
+    shell: '/bin/bash'
+    state: present
+
+- name: Create dir
+  file: 
+    path:  '{{ kafka_base }}'
+    state: directory
+    owner: kafka
+    group: kafka
+    mode: '0755'
+
+- name: Download kafka
+  get_url:
+    url: '{{ kafka_distr_url }}'
+    dest: '{{ kafka_base }}/{{ kafka_filename }}'
+    mode: '0755'
+    owner: kafka
+    group: kafka
+
+- name: Unarchive {{ kafka_base }}
+  unarchive:
+    src: '{{ kafka_base }}/{{ kafka_filename }}'
+    dest: '{{ kafka_base }}'
+    owner: kafka
+    group: kafka
+    remote_src: yes
+  #become: kafka
+
+- name: Create link
+  file:
+    src: '{{ kafka_base }}/{{ kafka_dir }}'
+    dest: '{{ kafka_home }}'
+    owner: kafka
+    group: kafka
+    state: link
+
+- name: Create service
+  template:
+    src: '{{ item }}'
+    dest: '/etc/systemd/system/{{ item }}'
+  with_items:
+    - zookeeper.service
+    - kafka.service
+#  notify: systemd-reload
+- name: systemd-reload
+  systemd:
+    daemon_reload: yes
+
+- name: Start Service
+  systemd:
+    state: started
+    name: '{{ item }}'
+  with_items:
+    - zookeeper
+    - kafka
+

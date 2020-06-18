@@ -1,0 +1,5 @@
+---
+- name: Install Java
+  package:
+    name: openjdk-8-jre-headless 
+    state: present

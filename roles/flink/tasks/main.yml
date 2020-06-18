@@ -1,0 +1,71 @@
+---
+- name: Install Java
+  package:
+    name: openjdk-8-jre-headless 
+    state: present
+  with_items:
+    - openjdk-8-jre-headless
+    - unzip
+    - gtar
+
+
+- name: Create User
+  user:
+    name: flink
+    shell: '/bin/bash'
+    state: present
+
+- name: Create dir
+  file: 
+    path:  '{{ flink_base }}'
+    state: directory
+    owner: flink
+    group: flink
+    mode: '0755'
+
+- name: Download flink
+  get_url:
+    url: '{{ flink_distr_url }}'
+    dest: '{{ flink_base }}/{{ flink_filename }}'
+    mode: '0755'
+    owner: flink
+    group: flink
+
+- name: Unarchive {{ flink_base }}
+  unarchive:
+    src: '{{ flink_base }}/{{ flink_filename }}'
+    dest: '{{ flink_base }}'
+    owner: flink
+    group: flink
+    remote_src: yes
+  #become: kafka
+
+- name: Create link
+  file:
+    src: '{{ flink_base }}/{{ flink_dir }}'
+    dest: '{{ flink_home }}'
+    owner: flink
+    group: flink
+    state: link
+
+#- name: Create service
+#  template:
+#    src: '{{ item }}'
+#    dest: '/etc/systemd/system/{{ item }}'
+#  with_items:
+#    - zookeeper.service
+#    - kafka.service
+#  notify: systemd-reload
+
+#- name: systemd-reload
+#  systemd:
+#    daemon_reload: yes
+
+#- name: Start Service
+#  systemd:
+#    state: started
+#    name: '{{ item }}'
+#  with_items:
+#    - zookeeper
+#    - kafka
+

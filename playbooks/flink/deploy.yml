@@ -1,0 +1,5 @@
+---
+- hosts: flink
+  gather_facts: yes
+  roles:
+    - { role: flink }
