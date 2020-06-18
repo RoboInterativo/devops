@@ -1,0 +1,20 @@
+{
+  "server": true,
+  "node_name": "{{ inventory_hostname }}",
+  "datacenter": "{{ dc_name |default('dc1') }}",
+  "data_dir": "{{ consul_path }}/data",
+  "bind_addr": "0.0.0.0",
+  "client_addr": "0.0.0.0",
+  "advertise_addr":  "{{ hostvars[inventory_hostname]['ansible_all_ipv4_addresses']  | list | first }}",
+  "bootstrap_expect": 3,
+  "retry_join": [{% for host in (groups[ansible_consul_group] | default([])) %} "{{ hostvars[host]['ansible_all_ipv4_addresses']  | list | first }}" {%- if not loop.last %}, {% endif %} {% endfor %}],
+  "ui": true,
+  "log_level": "DEBUG",
+  "enable_syslog": true,
+  "acl_enforce_version_8": false,
+  "acl": {
+    "enabled": true,
+    "default_policy": "deny",
+    "down_policy": "extend-cache"
+    }
+}

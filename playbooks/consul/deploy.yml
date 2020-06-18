@@ -1,0 +1,11 @@
+---
+
+- name: Install & configure Hashicorp Consul cluster
+  hosts: consul-dc1
+#:consul-dc2
+  #become: yes
+  gather_facts: yes
+  roles:
+    - name: Install consul agents
+      role: consul-install
+

@@ -43,15 +43,15 @@ for item in j['resources']:
             dc4.append(ip)
             h[name]={"ansible_host":  ip , 
                      "ansible_user": "root",   
-                      "dc_name": "dc4",
+                      "dc_name": "dc1",
                        "ansible_ssh_common_args": "-o \"UserKnownHostsFile /dev/null\"",
-                       "ansible_consul_group": "consul"   }
+                       "ansible_consul_group": "consul-dc1"   }
 a={'_meta': {'hostvars': h} }
-a['all'] = {  "children":["kafka","flink","click","consul"] }
+a['all'] = {  "children":["kafka","flink","click","consul-dc1"] }
 a['kafka']={'hosts':dc1}
 a['flink']={'hosts':dc2}
 a['click']={'hosts':dc3}
-a['consul']={'hosts':dc4}
+a['consul-dc1']={'hosts':dc4}
 if sys.argv[1]=='--list':
    print  json.dumps(a , indent=2)
 if sys.argv[1]=='--host':
